@@ -1,0 +1,16 @@
+{% extends "tribune/base.djhtml" %}
+{% block content %}
+<ul>
+    {%for p in preums_available %}
+    <li><a href="/{{tribune}}/preums/{{p}}">{{p}}</a></li>
+    {%endfor%}
+</ul>
+<h1>Preums de {{hour}}</h1>
+<h2>Blacklist</h2>
+{%for login in blacklist%}{{login}},{%endfor%}
+<h2>Résultats</h2>
+<table border="1">
+    <tr><th>Place</th><th>Moule</th><th>Nb preums</th></tr>
+    {{table_data|safe}}
+</table>
+{% endblock %}

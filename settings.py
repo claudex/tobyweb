@@ -100,10 +100,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'toby.urls'
+ROOT_URLCONF = 'tobyweb.urls'
 
 TEMPLATE_DIRS = (
-    '/home/xavier/projects/toby/',
+    '/home/xavier/Aptana Studio 3 Workspace/tobyweb',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
