@@ -1,4 +1,4 @@
-{% extends "tribune/base.djhtml" %}
+{% extends "tribune/base.html" %}
 {% block content %}
 <h1>Preums disponibles</h1>
 <ul>
@@ -6,21 +6,27 @@
     <li><a href="/{{tribune}}/preums/{{p}}">{{p}}</a></li>
     {%endfor%}
 </ul>
+
 <h1>Preums de {{hour}}</h1>
+
 <h2>Dernier preums</h2>
 {{last_preums.post_time}} {{last_preums.login}}: {{last_preums.message}}
+
 <h2>Blacklist</h2>
 {%for login in blacklist%}{{login}},{%endfor%}
+
 <h2>Résultats individuels</h2>
 <table border="1">
     <tr><th>Place</th><th>Moule</th><th>Nb preums</th></tr>
     {{table_data|safe}}
 </table>
+
 <h2>Résultats par équipes</h2>
 <table border="1">
-	<tr><th>Place</th><th>Équipe</th><th>Nb preums</th></tr>
-	{{team_table|safe}}
+    <tr><th>Place</th><th>Équipe</th><th>Nb preums</th></tr>
+    {{team_table|safe}}
 </table>
+
 <h2>Statistiques</h2>
 <p>Il y a {{nb_moules}} moules dans le classement, {{nb_team}} équipes pour un total de {{nb_preums}} preums.</p>
 {% endblock %}

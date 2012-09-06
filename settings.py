@@ -176,7 +176,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'django.contrib.admin',
+    'django.contrib.admin',
     #'debug_toolbar',
     #'autobreadcrumbs',
     'tribune',

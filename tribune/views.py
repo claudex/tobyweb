@@ -57,7 +57,7 @@ def preums(request,tribune,*args, **kwargs):
     nb_team = len(team_preums)
     nb_preums = preums_list.aggregate(Sum('score'))['score__sum']
     
-    return render_to_response('tribune/preums.djhtml',
+    return render_to_response('tribune/preums.html',
                               {'table_data': table_data,
                                'team_table': team_table,
                                'preums_available': preums_available,

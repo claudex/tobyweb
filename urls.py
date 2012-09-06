@@ -1,7 +1,22 @@
-from django.conf.urls.defaults import patterns, include, url
+# -*- coding: utf-8 -*-
+"""
+Root url's map for the webapp project
+"""
+from django.conf.urls.defaults import *
+from django.conf import settings
+
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$','tribune.views.index'),
-    url(r'^(?P<tribune>.+)/preums/$', 'tribune.views.preums'),
-    url(r'^(?P<tribune>.+)/preums/(?P<hour>.+)', 'tribune.views.preums'),
+    # Comptes utilisateurs
+    (r'^', include('tobyweb.tribune.urls')),
+    
+    (r'^admin/', include(admin.site.urls)),
 )
+        
+# Display medias with the django wcgi only when Debug mode is actived
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^medias/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+    )
