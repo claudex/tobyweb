@@ -5,10 +5,10 @@ from django.template import Context, loader
 from models import Blacklist, Preums, PreumsEquipes, PreumsMsg 
 
 
-def index(request):
-    return HttpResponse("Hello world")
-    
-def preums(request,tribune,*args, **kwargs):
+def preums(request, tribune, *args, **kwargs):
+    """
+    Preum's list (??)
+    """
     if 'hour' in kwargs:
         hour = kwargs['hour']
     else:

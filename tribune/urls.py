@@ -3,9 +3,10 @@
 Root url's map for the "tribune" application
 """
 from django.conf.urls.defaults import *
+from django.views.generic import TemplateView
 
 urlpatterns = patterns('tribune.views',
-    url(r'^$','index', name='tobyweb-index'),
+    url(r'^$', TemplateView.as_view(template_name='tribune/index.html'), name='tobyweb-index'),
     url(r'^(?P<tribune>.+)/preums/$', 'preums', name='tobyweb-preums-index'),
     url(r'^(?P<tribune>.+)/preums/(?P<hour>.+)', 'preums', name='tobyweb-preums-details'),
 )
