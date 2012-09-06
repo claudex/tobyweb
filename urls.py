@@ -9,10 +9,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Comptes utilisateurs
-    (r'^', include('tobyweb.tribune.urls')),
-    
     (r'^admin/', include(admin.site.urls)),
+    
+    (r'^', include('tobyweb.tribune.urls')),
 )
         
 # Display medias with the django wcgi only when Debug mode is actived
