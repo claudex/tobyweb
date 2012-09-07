@@ -1,21 +1,20 @@
 from django.http import HttpResponse, Http404
 from django.db.models import Sum
 from django.shortcuts import render_to_response
-from django.template import Context, loader
+from django.template import loader, RequestContext
+
 from models import Blacklist, Preums, PreumsEquipes, PreumsMsg 
 
-
-def index(request):
-    return HttpResponse("Hello world")
-    
-def preums(request,tribune,*args, **kwargs):
+def preums(request, tribune, *args, **kwargs):
+    """
+    Preum's list (??)
+    """
     if 'hour' in kwargs:
         hour = kwargs['hour']
     else:
         hour = 'minuit'
-        
     preums_available = [msg.preums_name for msg in PreumsMsg.objects.all().distinct()]
-    print preums_available
+    
     if hour not in preums_available:
         raise Http404
         
@@ -57,8 +56,9 @@ def preums(request,tribune,*args, **kwargs):
     nb_team = len(team_preums)
     nb_preums = preums_list.aggregate(Sum('score'))['score__sum']
     
-    return render_to_response('tribune/preums.djhtml',
+    return render_to_response('tribune/preums.html',
                               {'table_data': table_data,
+                              'preums_list': preums_list,
                                'team_table': team_table,
                                'preums_available': preums_available,
                                'last_preums': last_preums,
@@ -67,4 +67,4 @@ def preums(request,tribune,*args, **kwargs):
                                'nb_team': nb_team,
                                'nb_preums': nb_preums,
                                'tribune': tribune,
-                               'hour': hour})
+                               'hour': hour}, context_instance=RequestContext(request))

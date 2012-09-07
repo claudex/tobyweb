@@ -1,20 +1,24 @@
-from django.conf.urls.defaults import patterns, include, url
+# -*- coding: utf-8 -*-
+"""
+Root url's map for the webapp project
+"""
+from django.conf.urls.defaults import *
+from django.conf import settings
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
+
+import autobreadcrumbs
+autobreadcrumbs.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'toby.views.home', name='home'),
-    # url(r'^toby/', include('toby.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
-    url(r'^$','tribune.views.index'),
-    url(r'^(?P<tribune>.+)/preums/$', 'tribune.views.preums'),
-    url(r'^(?P<tribune>.+)/preums/(?P<hour>.+)', 'tribune.views.preums'),
+    (r'^admin/', include(admin.site.urls)),
+    
+    (r'^', include('tobyweb.tribune.urls')),
 )
+        
+# Display medias with the django wcgi only when Debug mode is actived
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^medias/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+    )

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<h2>Tribunes</h2>
+<ul>
+    <li><a href="{% url 'tobyweb-preums-index' tribune='foo' %}">Dummy</a></li>
+</ul>
+{% endblock %}

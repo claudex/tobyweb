@@ -166,7 +166,7 @@ class Posts(models.Model):
         db_table = u'euroxers_posts'
 
 class Preums(models.Model):
-    login = models.CharField(max_length=192, primary_key=True)
+    login = models.CharField(max_length=192, db_index=True)
     score = models.IntegerField(null=True, blank=True)
     equipe = models.BigIntegerField(null=True, blank=True) #models.ForeignKey('PreumsEquipes',db_column="equipe", null=False, blank=True)
     preums_name = models.CharField(max_length=192, primary_key=True)

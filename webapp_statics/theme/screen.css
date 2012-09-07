@@ -1,0 +1,29 @@
+/*
+* TobyWeb CSS Theme
+* Created by David THENON on July 2012
+*/
+body {
+  margin: 0;
+  padding: 50px 0 0 0;
+}
+.cap {
+  text-transform: capitalize;
+}
+
+/* Stealed from bootstrap doc */
+.separator {
+    margin: 40px 0 39px;
+}
+hr {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+    border-left: 0 none;
+    border-right: 0 none;
+    border-style: solid none;
+    border-width: 1px 0;
+    margin: 20px 0;
+}
