@@ -153,8 +153,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
-    #'homeapps.utils.site_metas',
-    #'autobreadcrumbs.context_processors.AutoBreadcrumbsContext',
+    'tobyweb.utils.site_metas',
+    'autobreadcrumbs.context_processors.AutoBreadcrumbsContext',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -178,7 +178,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     #'debug_toolbar',
-    #'autobreadcrumbs',
+    'autobreadcrumbs',
     'tribune',
 )
 

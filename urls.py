@@ -8,6 +8,9 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
+import autobreadcrumbs
+autobreadcrumbs.autodiscover()
+
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     

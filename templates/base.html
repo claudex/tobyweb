@@ -1,0 +1,73 @@
+{% load i18n autobreadcrumb %}<!DOCTYPE html>
+<html lang="en">
+<head>{% spaceless %}
+    <meta charset="utf-8">
+    <title>{% block title %}{% current_title_from_breadcrumbs %}{% endblock %}</title>
+    
+    <link type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link type="text/css" href="{{ STATIC_URL }}theme/screen.css" rel="stylesheet">
+    {% block head_more_links %}{% endblock %}
+
+    {% block head_base_js %}
+    <script src="{{ STATIC_URL }}jquery/jquery-1.7.1.min.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+    {% endblock %}{% block head_more_js %}
+{% endblock %}{% endspaceless %}</head>
+<body>
+
+    <div id="header">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                    </a>
+                    
+                    <a class="brand" href="{{ SITE.web_url }}" title="{{ SITE.name }}">{{ SITE.name }}</a>
+                    
+                    {% if user.is_authenticated %}<ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <i class="icon-user icon-white"></i> <strong>{{ user.get_full_name }}</strong> <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% if user.is_staff %}<li><a href="{% url admin:index %}" class="cap">{% trans 'admin' %}</a></li>{% endif %}
+                                <li class="divider"></li>
+                                <li><a href="{% url admin:logout %}" class="cap">{% trans 'disconnect' %}</a></li>
+                            </ul>
+                        </li>
+                    </ul>{% endif %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="body_content">
+        <div class="container">
+            {% block breadcrumbsroot %}{% block breadcrumbs %}{% autobreadcrumbs_tag %}{% endblock %}{% endblock %}
+            
+            {% block body_content %}
+                <h1>{% current_title_from_breadcrumbs %}</h1>
+                {% block content %}{% endblock %}
+                <div class="cale"></div>
+            {% endblock %}
+            
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="row-fluid">
+                <div class="foot-part span12 well">
+                    <p>{% blocktrans %}Xavier Claude © 2012 All rights reserved{% endblocktrans %}</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
