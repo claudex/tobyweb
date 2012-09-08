@@ -80,6 +80,16 @@ class Chasseurs(models.Model):
     lance = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'euroxers_chasseurs'
+        
+    def __unicode__(self):
+        return "%s: %s" % (self.login, self.score)
+    
+    def mean_patience(self):
+        if self.score != 0:
+            mpat = self.patience / self.score
+        else:
+            mpat = 0
+        return mpat 
 
 class Coincoins(models.Model):
     id = models.BigIntegerField(unique=True, primary_key=True)

@@ -9,4 +9,5 @@ urlpatterns = patterns('tribune.views',
     url(r'^$', TemplateView.as_view(template_name='tribune/index.html'), name='tobyweb-index'),
     url(r'^(?P<tribune>.+)/preums/$', 'preums', name='tobyweb-preums-index'),
     url(r'^(?P<tribune>.+)/preums/(?P<hour>.+)', 'preums', name='tobyweb-preums-details'),
+    url(r'^(?P<tribune>.+)/chasse/$', 'chasse', name= 'tobyweb-chasse-index'),
 )

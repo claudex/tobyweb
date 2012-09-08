@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if item.blacklist %}
+<h2>Blacklist</h2>
+<ul>{% for login in blacklist %}<li>{{ login }}</li>
+{% endfor %}</ul>
+<p>Cela signifie que tous les canards envoyés par ces moules sont ignorés (vous perdrez 10 points si vous leur tirez dessus),
+ et que les canards survivront à leur <i>pan ! pan !</i></p>
+<hr class="bs-docs-separator">
+{% endif %}
+
+<h2>Hall of Fame</h2>
+<ul>
+	<li>Le plus intelligent&nbsp;: {{intelligent.login}} avec {{intelligent.points}} points</li>
+	<li>Le plus efficace&nbsp;: {{efficace.login}} avec {{efficace.efficace}} points par tir </li>
+	<li>Le plus zen&nbsp;: {{zen.login}} avec {{zen.pmoyenne}} de patience moyennes</li>
+	<li>Le plus toupileur&nbsp;: {{toupileur.login}} avec {{toupileur.id__count}} tirs à 300 secondes</li>
+	<li>Le plus canardeur&nbsp;: {{canardeur.login}} avec {{canadeurs.score}} tirs</li>
+	<li>Le plus gentil&nbsp;: {{gentil.login}} avec {{gentil.survie}} canards sauvés</li>
+	<li>Le plus généreux&nbsp;: {{genereux.login}} avec {{genereux.lance}} canards lancés</li>
+	<li>Le plus con&nbsp;: {{con.login}} avec {{con.points}} points</li>
+	<li>Le plus lourd&nbsp;: {{lourd.login}} avec {{lourd.efficace}} points par tir</li>
+	<li>Le plus précoce&nbsp;: {{precoce.login}} avec {{precoce.pmoyenne}} de patience moyenne</li>
+	<!--<li>Le plus manquant&nbsp;: les moules&lt; avec 0 idée pour remplir cette ligne</li>-->
+	<li>Le plus maladroit&nbsp;: {{maladroit.login}} avec {{maladroit.ratai}} tirs dans le vent</li>
+	<li>Le plus chauvounet&nbsp;: {{chauvounet.login}} avec {{chauvounet.score}} cheveu</li>
+	<li>Le plus radin&nbsp;: {{radin.login}} avec {{radin.lance}} coin&nbsp;!&nbsp;coin&nbsp;! pour {{radin.score}} tirs</li>
+</ul>
+<hr class="bs-docs-separator">
+
+<h2>Résultats individuels</h2>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Rang</th><th>Moule</th><th>Points</th><th>Nb tirs</th><th>Patience moyenne</th><th>Plombs gâchés</th>
+            <th>coin&nbsp;!&nbsp;coin&nbsp;! lancés</th><th>coin&nbsp;!&nbsp;coin&nbsp;! sauvés</th><th>Tirs toupils</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in scorelist %}
+        <tr>
+        	<td>{{forloop.counter}}</td>
+        	<td>{{item.login}}</td>
+        	<td>{{item.points}}</td>
+        	<td>{{item.score}}</td>
+        	<td>{{item.mean_patience}}</td>
+        	<td>{{item.ratai}}</td>
+        	<td>{{item.lance}}</td>
+        	<td>{{item.survie}}</td>
+        	<td>{{item.toupil}}</td>
+        </tr>
+    {% endfor %}
+	</tbody>
+</table>
+{% endblock %}

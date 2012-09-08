@@ -1,9 +1,9 @@
 from django.http import HttpResponse, Http404
-from django.db.models import Sum
+from django.db.models import Count, F, Sum
 from django.shortcuts import render_to_response
 from django.template import loader, RequestContext
 
-from models import Blacklist, Preums, PreumsEquipes, PreumsMsg 
+from models import Blacklist, ChasseLog, Chasseurs, Preums, PreumsEquipes, PreumsMsg 
 
 def preums(request, tribune, *args, **kwargs):
     """
@@ -32,7 +32,7 @@ def preums(request, tribune, *args, **kwargs):
     preums_list = Preums.objects.filter(preums_name=hour).exclude(score = 0).exclude(login__in = blacklist_login).order_by('score').reverse()
     table_data = '';
     i = 1
-    # TODO  /!\ Warning big XSS fault (verify that there is no <script> or <img>...)
+     #TODO  /!\ Warning big XSS fault (verify that there is no <script> or <img>...)
     for preums in preums_list:
         if preums.get_equipe():
             name= "%s (%s)" % (preums.login,preums.get_equipe())
@@ -45,7 +45,7 @@ def preums(request, tribune, *args, **kwargs):
     team_preums = Preums.objects.filter(preums_name=hour).exclude(equipe = 0).values('equipe').annotate(Sum('score')).order_by('score__sum').reverse()
     team_table = ''
     i = 1
-    # TODO  /!\ Warning big XSS fault (verify that there is no <script> or <img>...)
+    #TODO  /!\ Warning big XSS fault (verify that there is no <script> or <img>...)
     for preums in team_preums:
         team = PreumsEquipes.objects.get(equipe_id=preums['equipe'])
         team_table += "<tr><td>%d</td><td>%s</td><td>%d</td></tr>\n" % (i,team.nom, preums['score__sum'])
@@ -68,3 +68,57 @@ def preums(request, tribune, *args, **kwargs):
                                'nb_preums': nb_preums,
                                'tribune': tribune,
                                'hour': hour}, context_instance=RequestContext(request))
+    
+    
+def chasse(request, tribune):
+    #Blacklist
+    blacklist = [bl.login for bl in Blacklist.objects.filter(chasse = 1)]
+    
+    #Score
+    score_list = Chasseurs.objects.exclude(login = blacklist).order_by('-points')
+    all_toupils = ChasseLog.objects.filter(patience = 300).filter(quoi = 'tue') #TODO: maybe too much data in memory
+    
+#    i = 1
+    for score in score_list:
+#        score.rank = i
+#        score.mean_patience =  (score.patience / score.score) if score.score != 0 else 0 
+        score.toupil = all_toupils.filter(login = score.login).count()
+#        i += 1
+    
+    #TODO: One Query to rule them all, One Query to find them, One Query to bring them all and in the darkness bind them
+    intelligent = score_list.order_by('-points')[0]
+    efficace = Chasseurs.objects.extra(select = { 'efficace': 'CAST((points - 10*CAST(survie AS SIGNED))/score AS SIGNED)'}).order_by('-efficace')[0]
+    zen = Chasseurs.objects.extra(select = {'pmoyenne': 'CAST(patience/score AS UNSIGNED)'}).order_by('-pmoyenne')[0]
+    canardeur = score_list.order_by('-score')[0]
+    gentil = score_list.order_by('-survie')[0]
+    genereux = score_list.order_by('-lance')[0]
+    toupileur = all_toupils.values('login').annotate(Count('id')).order_by('-id__count')[0]
+    con = score_list.order_by('points')[0]
+    lourd = Chasseurs.objects.exclude(score = 0).extra(select = { 'efficace': 'CAST((points - 10*CAST(survie AS SIGNED))/score AS SIGNED)'}).order_by('efficace')[0]
+    precoce = Chasseurs.objects.exclude(score = 0).extra(select = {'pmoyenne': 'CAST(patience/score AS UNSIGNED)'}).order_by('pmoyenne')[0]
+    maladroit = Chasseurs.objects.exclude(login = blacklist).order_by('-ratai')[0]
+    chauvounet = {'login': 'domi', 'score': 0}
+    radin = score_list.order_by('lance','-score')[0]
+    
+    #stats
+    nb_chasseurs = Chasseurs.objects.exclude(login = blacklist).count()
+    
+    #TODO add the team highscore
+    
+    return render_to_response('tribune/chasse.html',
+                              {'scorelist': score_list,
+                               'blacklist': blacklist,
+                               'intelligent': intelligent,
+                               'efficace': efficace,
+                               'zen': zen,
+                               'canardeur': canardeur,
+                               'gentil': gentil,
+                               'genereux': genereux,
+                               'toupileur': toupileur,
+                               'con': con,
+                               'lourd': lourd,
+                               'precoce': precoce,
+                               'maladroit': maladroit,
+                               'chauvounet': chauvounet,
+                               'radin': radin},
+                              context_instance=RequestContext(request))
