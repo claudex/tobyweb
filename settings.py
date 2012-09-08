@@ -107,6 +107,8 @@ ADMIN_MEDIA_PREFIX = os.path.join('/', STATIC_DIRNAME, 'admin/')
 # Absolute paths to your template directories
 TEMPLATE_DIRS = (
     os.path.join(WEBAPP_ROOT, 'templates/'),
+    '/usr/share/pyshared/debug_toolbar/templates/',
+    '/usr/share/pyshared/debug_toolbar/templatetags',
 )
 
 
@@ -177,7 +179,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    #'debug_toolbar',
+    'debug_toolbar', #TODO remove it, but, currently, doesn't work without it
     'autobreadcrumbs',
     'tribune',
 )

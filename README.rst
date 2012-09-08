@@ -8,5 +8,6 @@ Requires
 
 * `Django`_ version 1.3.x;
 * `autobreadcrumbs`_;
+* Django debug toolbar
 
 And the database from *tobybur*.
