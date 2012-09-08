@@ -30,26 +30,12 @@ def preums(request, tribune, *args, **kwargs):
    
     #Individual highscore list
     preums_list = Preums.objects.filter(preums_name=hour).exclude(score = 0).exclude(login__in = blacklist_login).order_by('score').reverse()
-    table_data = '';
-    i = 1
-     #TODO  /!\ Warning big XSS fault (verify that there is no <script> or <img>...)
-    for preums in preums_list:
-        if preums.get_equipe():
-            name= "%s (%s)" % (preums.login,preums.get_equipe())
-        else:
-            name= preums.login
-        table_data += "<tr><td>%d</td><td>%s</td><td>%d</td></tr>\n" % (i,name,preums.score)
-        i+=1
     
     #Team highscore list
     team_preums = Preums.objects.filter(preums_name=hour).exclude(equipe = 0).values('equipe').annotate(Sum('score')).order_by('score__sum').reverse()
-    team_table = ''
-    i = 1
-    #TODO  /!\ Warning big XSS fault (verify that there is no <script> or <img>...)
-    for preums in team_preums:
-        team = PreumsEquipes.objects.get(equipe_id=preums['equipe'])
-        team_table += "<tr><td>%d</td><td>%s</td><td>%d</td></tr>\n" % (i,team.nom, preums['score__sum'])
-        i+=1
+    
+    for team in team_preums:
+        team['name'] = PreumsEquipes.objects.get(equipe_id = team['equipe']).nom
     
     #Stats
     nb_moules = len(preums_list)
@@ -57,9 +43,8 @@ def preums(request, tribune, *args, **kwargs):
     nb_preums = preums_list.aggregate(Sum('score'))['score__sum']
     
     return render_to_response('tribune/preums.html',
-                              {'table_data': table_data,
-                              'preums_list': preums_list,
-                               'team_table': team_table,
+                              {'preums_list': preums_list,
+                               'team_preums': team_preums,
                                'preums_available': preums_available,
                                'last_preums': last_preums,
                                'blacklist': blacklist_login,
@@ -67,7 +52,8 @@ def preums(request, tribune, *args, **kwargs):
                                'nb_team': nb_team,
                                'nb_preums': nb_preums,
                                'tribune': tribune,
-                               'hour': hour}, context_instance=RequestContext(request))
+                               'hour': hour},
+                              context_instance=RequestContext(request))
     
     
 def chasse(request, tribune):

@@ -56,7 +56,13 @@
         </tr>
     </thead>
     <tbody>
-    {{ team_table|safe }}
+    {% for item in team_preums %}
+    	<tr>
+    		<td>{{forloop.counter}}</td>
+    		<td>{{item.name}}</td>
+    		<td>{{item.score__sum}}</td>
+    	</tr>
+    {% endfor %}
     </tbody>
 </table>
 {% endblock %}
