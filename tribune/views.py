@@ -1,9 +1,13 @@
+from decimal import Decimal
+import json
+
+from django.core import serializers
 from django.http import HttpResponse, Http404
 from django.db.models import Count, F, Sum
 from django.shortcuts import render_to_response
 from django.template import loader, RequestContext
 
-from models import Blacklist, ChasseLog, Chasseurs, Preums, PreumsEquipes, PreumsMsg 
+from models import Blacklist, ChasseLog, Chasseurs, Cps, Preums, PreumsEquipes, PreumsMsg 
 
 def preums(request, tribune, *args, **kwargs):
     """
@@ -108,3 +112,19 @@ def chasse(request, tribune):
                                'chauvounet': chauvounet,
                                'radin': radin},
                               context_instance=RequestContext(request))
+    
+def cps(request, tribune):
+    moules = Cps.objects.all()
+    return render_to_response('tribune/cps.html',
+                              {'tribune': tribune,
+                               'moules': moules},
+                              context_instance=RequestContext(request))
+    
+def cps_json(request, tribune):
+    #TODO: remove this view, the result could be directly written in the template
+    data = []
+    for moule in Cps.objects.all():
+        data.append({'login': moule.login,
+                     'latitude': float(moule.latitude), #JSON serializer doesn't accept Decimal objects
+                     'longitude': float(moule.longitude)})
+    return HttpResponse(json.dumps(data), mimetype="application/json")

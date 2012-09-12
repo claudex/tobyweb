@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="64px"
+   height="64px"
+   id="svg3873"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="map pin.svg">
+  <title
+     id="title2993">map pin</title>
+  <defs
+     id="defs3875">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4422">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4424" />
+      <stop
+         style="stop-color:#2d2d2d;stop-opacity:1"
+         offset="1"
+         id="stop4426" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3892">
+      <stop
+         style="stop-color:#f41922;stop-opacity:1;"
+         offset="0"
+         id="stop3894" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop3896" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3892"
+       id="linearGradient3898"
+       x1="-1039.7554"
+       y1="1109.4376"
+       x2="-1049.6417"
+       y2="1028.5485"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4422"
+       id="linearGradient4428"
+       x1="-998.87286"
+       y1="1066.0852"
+       x2="-1000.5138"
+       y2="999.62854"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.5"
+     inkscape:cx="-24.454545"
+     inkscape:cy="30.454545"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:document-units="px"
+     inkscape:grid-bbox="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3878">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>map pin</dc:title>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>map pin</rdf:li>
+            <rdf:li>pointer</rdf:li>
+            <rdf:li>location</rdf:li>
+            <rdf:li>map symbols</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:date>2012-05-01</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Srinivas Bala, NetAlloy, INdia</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>netalloy.com</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <g
+       id="g3841"
+       transform="matrix(0.18403489,0,0,0.17533745,214.35375,-157.87119)">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3047"
+         d="m -995.71637,1225.7793 c -0.2729,-0.7794 -1.64499,-6.0275 -3.04899,-11.6624 -4.44104,-17.8231 -12.12214,-36.9879 -22.54644,-56.2548 -5.9844,-11.0608 -7.0667,-12.8241 -24.5514,-40 -28.252,-43.911 -33.2174,-56.2409 -32.1727,-79.8899 0.9573,-21.6717 8.2717,-37.9093 24.1489,-53.61005 13.1786,-13.03208 27.8068,-20.54865 45.6012,-23.43174 44.09653,-7.14465 86.87817,21.88281 95.54585,64.82809 2.02078,10.0123 1.57231,27.2426 -0.95271,36.6036 -2.77004,10.2694 -13.8832,31.0451 -29.58861,55.315 -28.3481,43.8069 -39.0816,65.6868 -47.119,96.0504 -3.1117,11.7554 -4.3985,14.6727 -5.3161,12.0518 z"
+         style="fill:#f41922;stroke:#5a0000;stroke-width:5.69999981;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         transform="matrix(1.0954546,0,0,1.0954546,94.909093,-88.069641)"
+         d="m -962.85713,1042.3622 c 0,16.5685 -14.07105,30 -31.42858,30 -17.35749,0 -31.42859,-13.4315 -31.42859,-30 0,-16.5686 14.0711,-30 31.42859,-30 17.35753,0 31.42858,13.4314 31.42858,30 z"
+         sodipodi:ry="30"
+         sodipodi:rx="31.428572"
+         sodipodi:cy="1042.3622"
+         sodipodi:cx="-994.28571"
+         id="path3049"
+         style="fill:#0e232e;fill-opacity:1;stroke:#a44444;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         sodipodi:type="arc" />
+    </g>
+  </g>
+</svg>

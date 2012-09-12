@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<div>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Moule</th><th>Longitude</th><th>Latitude</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in moules %}
+        <tr>
+            <td>{{ item.login }}</td>
+            <td>{{ item.longitude }}</td>
+            <td>{{ item.latitude }}</td>
+        </tr>
+    {% empty %}
+        <tr><td>Aucune entrée</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+<div id="map_container">
+<div id="mapdiv">&nbsp;</div>
+</div>
+<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script>
+        init();
+        
+        function init() {
+            var map = new OpenLayers.Map("mapdiv");
+            var zoom=2;
+            map.addLayer(new OpenLayers.Layer.OSM());
+ 
+            var lonLat = new OpenLayers.LonLat( -0.1279688 ,51.5077286 )
+                .transform(
+                    new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                    map.getProjectionObject() // to Spherical Mercator Projection
+                );
+        
+            map.setCenter (lonLat, zoom);
+            
+            $.getJSON('./cps.json', function(data) {
+            	treat_json(map, data);
+            });
+            
+        }
+        
+        function treat_json(map, data) {
+			var markers = new OpenLayers.Layer.Markers( "Markers" );
+            map.addLayer(markers);
+            
+            
+            // allow testing of specific renderers via "?renderer=Canvas", etc
+            var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+            renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+            
+            // define the style for the points
+            var vectorLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
+                styleMap: new OpenLayers.StyleMap({'default':{
+                    strokeColor: "#00FF00",
+                    strokeOpacity: 1,
+                    strokeWidth: 3,
+                    fillColor: "#FF5500",
+                    fillOpacity: 0.5,
+                    pointRadius: 6,
+                    pointerEvents: "visiblePainted",
+                    label : "${login}\n",
+                    
+                    fontColor: "blue",
+                    fontSize: "12px",
+                    fontFamily: "Ubuntu, Deja Vu Sans, sans",
+                    fontWeight: "bold",
+                    labelAlign: "${align}",
+                    labelXOffset: "${xOffset}",
+                    labelYOffset: "${yOffset}",
+                    labelOutlineColor: "white",
+                    labelOutlineWidth: 3
+                }}),
+                renderers: renderer
+            }); 
+          	map.addLayer(vectorLayer);
+            
+            // Add all the moules to the layer
+            for (var i in data) {
+            	var moule=data[i];
+                var moulePos = new OpenLayers.LonLat(moule.longitude, moule.latitude)
+                	.transform(
+                		new OpenLayers.Projection("EPSG:4326"),
+                        map.getProjectionObject()
+                    );
+                var point = new OpenLayers.Geometry.Point(moulePos.lon, moulePos.lat);
+           		var pointFeature = new OpenLayers.Feature.Vector(point);
+            	pointFeature.attributes = {
+	                login: moule.login,
+	            };
+				vectorLayer.addFeatures(pointFeature);
+            
+	       }
+        }
+</script>
+{% endblock %}

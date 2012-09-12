@@ -27,3 +27,15 @@ hr {
     border-width: 1px 0;
     margin: 20px 0;
 }
+
+/* Cps page, OpenLayer div */
+#map_container {
+	height: 600px;
+	width: 800px;
+	margin-bottom: 20px;
+}
+#mapdiv {
+	height: 100%;
+	width: 100%;
+
+}
