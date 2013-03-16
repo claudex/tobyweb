@@ -11,6 +11,8 @@ dist/*
 #defaults
 *.pyc
 *.pyo
+*.kate-swp
+*~
 
 #django project
 _statics
