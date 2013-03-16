@@ -17,3 +17,8 @@ _statics
 dispatcher.fcgi
 dev_settings.py
 prod_settings.py
+
+#ide files
+.project
+.pydevproject
+.settings/
