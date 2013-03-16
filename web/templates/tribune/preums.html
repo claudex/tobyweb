@@ -4,25 +4,25 @@
 {% block content %}
 <ul class="nav nav-pills">
     {% for p in preums_available %}
-        <li{% if hour == p %} class="active"{% endif %}><a href="{% url 'tobyweb-preums-details' tribune=tribune hour=p %}">{{ p }}</a></li>
+        <li{% if p == cur_preums %} class="active"{% endif %}><a href="{% url 'tobyweb-preums-details' tribune=tribune hour=p %}">{{ p.name }}</a></li>
     {% endfor %}
 </ul>
 
 <div class="row-fluid">
     <div class="span6 well">
         <h2>Dernier preums</h2>
-        <p>{{ last_preums.post_time }} {{ last_preums.login }}: {{ last_preums.message }}</p>
+        <p>{{ cur_preums.last.time }} {{ cur_preums.last.mussel }}: {{ cur_preums.last.msg }}</p>
     </div>
     <div class="span6 well">
         <h2>Statistiques</h2>
-        <p>Il y a {{ nb_moules }} moules dans le classement, {{ nb_team }} équipes pour un total de {{ nb_preums }} preums.</p>
+        <p>Il y a {{ preums_list|length }} moules dans le classement, {{ team_preums|length }} équipes pour un total de {{ nb_preums }} preums.</p>
     </div>
 </div>
 <hr class="bs-docs-separator">
 
 {% if item.blacklist %}
 <h2>Blacklist</h2>
-<ul>{% for login in blacklist %}<li>{{ login }}</li>
+<ul>{% for mussel in blacklist %}<li>{{ mussel.username }}</li>
 {% endfor %}</ul>
 <hr class="bs-docs-separator">
 {% endif %}
@@ -38,7 +38,7 @@
     {% for item in preums_list %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{% if item.get_equipe %}{{ item.login }} ({{ item.get_equipe }}){% else %}{{ item.login }}{% endif %}</td>
+            <td>{{ item.mussel }} {% if item.mussel.team %}({{ item.mussel.team }}){% endif %}</td>
             <td>{{ item.score }}</td>
         </tr>
     {% empty %}
@@ -59,7 +59,7 @@
     {% for item in team_preums %}
     	<tr>
     		<td>{{forloop.counter}}</td>
-    		<td>{{item.name}}</td>
+    		<td>{{item.team}}</td>
     		<td>{{item.score__sum}}</td>
     	</tr>
     {% endfor %}

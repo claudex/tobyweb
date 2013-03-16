@@ -33,8 +33,6 @@ def preums(request, tribune_name, *args, **kwargs):
             team['name'] = PreumsEquipes.objects.get(equipe_id = team['equipe']).nom
         
         #Stats
-        nb_moules = len(preums_list)
-        nb_team = len(team_preums)
         nb_preums = preums_list.aggregate(Sum('score'))['score__sum']
         
         return render_to_response('tribune/preums.html',
@@ -42,13 +40,8 @@ def preums(request, tribune_name, *args, **kwargs):
                                 'preums_list': preums_list,
                                 'team_preums': team_preums,
                                 'preums_available': preums_available,
-                              #  'last_preums': last_preums,
-                              #  'blacklist': blacklist_login,
-                                'nb_moules': nb_moules,
-                                'nb_team': nb_team,
                                 'nb_preums': nb_preums,
                                 'tribune': tribune},
-                                #'hour': hour},
                                 context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return HttpResponse("<h1>Tribune not found</h1>") #TODO change not found handler.
