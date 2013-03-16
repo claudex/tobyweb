@@ -9,55 +9,49 @@ from django.template import loader, RequestContext
 
 from models import Blacklist, ChasseLog, Chasseurs, Cps, Preums, PreumsEquipes, PreumsMsg 
 
-def preums(request, tribune, *args, **kwargs):
+def preums(request, tribune_name, *args, **kwargs):
     """
     Preum's list (??)
     """
-    if 'hour' in kwargs:
-        hour = kwargs['hour']
-    else:
-        hour = 'minuit'
-    preums_available = [msg.preums_name for msg in PreumsMsg.objects.all().distinct()]
-    
-    if hour not in preums_available:
-        raise Http404
+    try:
+        tribune = Tribune.objects.get(name=tribune_name)
+        if 'hour' in kwargs:
+            hour = kwargs['hour']
+        else:
+            hour = 'minuit'
+        preums_available = [preums.name for preums in PreumsFilter.objects.filter(tribune=tribune]
         
-    #Retrieve the blacklist login
-    preums_col_name = "preums_%s" % (hour)
-    if preums_col_name not in dir(Blacklist):
-        preums_col_name = 'preums'    
-    filter_args = { preums_col_name: 1}
-    blacklist_login = [bl.login for bl in Blacklist.objects.filter(**filter_args)]
+        cur_preums = Preums.objects.get(name=hour)
     
-    #Last preums
-    last_preums = PreumsMsg.objects.get(preums_name=hour)
-   
-    #Individual highscore list
-    preums_list = Preums.objects.filter(preums_name=hour).exclude(score = 0).exclude(login__in = blacklist_login).order_by('score').reverse()
-    
-    #Team highscore list
-    team_preums = Preums.objects.filter(preums_name=hour).exclude(equipe = 0).values('equipe').annotate(Sum('score')).order_by('score__sum').reverse()
-    
-    for team in team_preums:
-        team['name'] = PreumsEquipes.objects.get(equipe_id = team['equipe']).nom
-    
-    #Stats
-    nb_moules = len(preums_list)
-    nb_team = len(team_preums)
-    nb_preums = preums_list.aggregate(Sum('score'))['score__sum']
-    
-    return render_to_response('tribune/preums.html',
-                              {'preums_list': preums_list,
-                               'team_preums': team_preums,
-                               'preums_available': preums_available,
-                               'last_preums': last_preums,
-                               'blacklist': blacklist_login,
-                               'nb_moules': nb_moules,
-                               'nb_team': nb_team,
-                               'nb_preums': nb_preums,
-                               'tribune': tribune,
-                               'hour': hour},
-                              context_instance=RequestContext(request))
+        #Individual highscore list
+        preums_list = Preums.objects.filter(preums=cur_preums).order_by('-score')
+        
+        #Team highscore list
+        team_preums = Preums.objects.filter(preums_name=hour).annotate(team="mussel.team").aggregate(Sum("score")).order_by("-score__sum")
+        
+        for team in team_preums:
+            team['name'] = PreumsEquipes.objects.get(equipe_id = team['equipe']).nom
+        
+        #Stats
+        nb_moules = len(preums_list)
+        nb_team = len(team_preums)
+        nb_preums = preums_list.aggregate(Sum('score'))['score__sum']
+        
+        return render_to_response('tribune/preums.html',
+                                {'cur_preums': cur_preums,
+                                'preums_list': preums_list,
+                                'team_preums': team_preums,
+                                'preums_available': preums_available,
+                              #  'last_preums': last_preums,
+                              #  'blacklist': blacklist_login,
+                                'nb_moules': nb_moules,
+                                'nb_team': nb_team,
+                                'nb_preums': nb_preums,
+                                'tribune': tribune},
+                                #'hour': hour},
+                                context_instance=RequestContext(request))
+    except ObjectDoesNotExist:
+        return HttpResponse("<h1>Tribune not found</h1>") #TODO change not found handler.
     
     
 def chasse(request, tribune):
@@ -128,3 +122,40 @@ def cps_json(request, tribune):
                      'latitude': float(moule.latitude), #JSON serializer doesn't accept Decimal objects
                      'longitude': float(moule.longitude)})
     return HttpResponse(json.dumps(data), mimetype="application/json")
+
+def post(request):
+    if request.method == 'POST':
+        json_dump = json.load(request)
+        tribune_name = json_dump['tribune']
+        try:
+            tribune = Tribune.objects.get(name=tribune_name)
+            post_list = []
+            for post in json_dump['posts']:
+                post_id=int(post['post_id'])
+                ua = post['ua']
+                login = post['user']
+                time_text = post['time']
+                msg = post['msg']
+                time = timezone.make_aware(datetime.strptime(time_text,"%Y-%m-%dT%H:%M:%S"),
+                    timezone.utc)
+                if login:
+                    mussel,m_c = Mussel.objects.get_or_create(username=login, tribune=tribune)
+                else:
+                    mussel = None
+                p, created = Post.objects.get_or_create(tribune=tribune,post_id=post_id,
+                    time=time, ua=ua, mussel=mussel, msg=msg)
+                if created:
+                    post_list.append(p)
+            resp = []            
+            #for fil in Filter.objects.filter(tribune = tribune):
+                #resp.append(fil.process(post_list))
+            [resp.append(fil.process(post_list)) for fil in Filter.objects.filter(tribune = tribune)]
+            return HttpResponse(json.dumps(resp,cls=PostEncoder))
+        except Tribune.DoesNotExist:
+            resp = HttpResponse("The tribune does not exist")
+            resp.status_code = 400
+            return resp
+    else:
+        resp = HttpResponse("The method is not allowed. Method allowed: POST")
+        resp.status_code = 400
+        return resp

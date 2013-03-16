@@ -1,240 +1,178 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#     * Rearrange models' order
-#     * Make sure each model has one field with primary_key=True
-# Feel free to rename the models, but don't rename db_table values or field names.
-#
-# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
-# into your database.
+# -*- encoding: utf-8 -*-
 
 from django.db import models
+import helpers
+from polymorphic import PolymorphicModel
 
-class AutomailConf(models.Model):
-    login = models.CharField(max_length=192, primary_key=True)
-    etat = models.IntegerField(null=True, blank=True)
-    prive = models.IntegerField(null=True, blank=True)
-    email = models.CharField(max_length=384, blank=True)
-    class Meta:
-        db_table = u'euroxers_automail_conf'
+import re
 
-class Blacklist(models.Model):
-    login = models.CharField(max_length=192, primary_key=True)
-    chasse = models.IntegerField(null=True, blank=True)
-    preums = models.IntegerField(null=True, blank=True)
-    fortunes = models.IntegerField(null=True, blank=True)
-    repondeur = models.IntegerField(null=True, blank=True)
-    uptime = models.IntegerField(null=True, blank=True)
-    cps = models.IntegerField(null=True, blank=True)
-    blacklist = models.IntegerField(null=True, blank=True)
-    preums_equipe = models.IntegerField(null=True, blank=True)
-    historique = models.IntegerField(null=True, blank=True)
-    passwd = models.IntegerField(null=True, blank=True)
-    mpc = models.IntegerField(null=True, blank=True)
-    convert2 = models.IntegerField(null=True, blank=True)
-    repondeur_conf = models.IntegerField(null=True, blank=True)
-    bookmark = models.IntegerField(null=True, blank=True)
-    preums_minuit = models.IntegerField(null=True, blank=True, db_column="preums$minuit")
-    preums_midi = models.IntegerField(null=True, blank=True, db_column="preums$midi")
-    preums_18h = models.IntegerField(null=True, blank=True, db_column="preums$18h")
-    preums_test = models.IntegerField(null=True, blank=True, db_column="preums$test")
-    coin = models.IntegerField(null=True, blank=True)
-    preums_geo = models.IntegerField(null=True, blank=True, db_column="preums$geo")
-    chasse_all = models.IntegerField(null=True, blank=True)
-    ntp = models.IntegerField(null=True, blank=True)
-    preums_taiste = models.IntegerField(null=True, blank=True, db_column="preums$taiste")
-    automail = models.IntegerField(null=True, blank=True)
-    automail_conf = models.IntegerField(null=True, blank=True)
+class Tribune(models.Model):
+    name = models.CharField(max_length=42, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+class Team(models.Model):
+    name = models.CharField(max_length=42,unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+class Mussel(models.Model):
+    username = models.CharField(max_length=256)
+    tribune = models.ForeignKey(Tribune)
+    team = models.ForeignKey(Team)
+    
     class Meta:
-        db_table = u'euroxers_blacklist'
-
-class Bookmark(models.Model):
-    id = models.BigIntegerField(unique=True,primary_key=True)
-    book_time = models.DateTimeField()
-    book_login = models.CharField(max_length=192, blank=True)
-    post_time = models.DateTimeField()
-    login = models.CharField(max_length=192, blank=True)
-    info = models.CharField(max_length=192, blank=True)
-    message = models.TextField(blank=True)
-    class Meta:
-        db_table = u'euroxers_bookmark'
-
-class ChasseLog(models.Model):
-    id = models.BigIntegerField(unique=True,primary_key=True)
-    post_time = models.DateTimeField()
-    quoi = models.CharField(max_length=21)
-    login = models.CharField(max_length=192, blank=True)
-    cible = models.DateTimeField()
-    message = models.TextField(blank=True)
-    patience = models.IntegerField(null=True, blank=True)
-    points = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_chasse_log'
-
-class Chasseurs(models.Model):
-    login = models.CharField(max_length=192, primary_key=True)
-    score = models.IntegerField(null=True, blank=True)
-    points = models.IntegerField(null=True, blank=True)
-    patience = models.IntegerField(null=True, blank=True)
-    ratai = models.IntegerField(null=True, blank=True)
-    survie = models.IntegerField(null=True, blank=True)
-    lance = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_chasseurs'
+        unique_together = ("username","tribune")
         
     def __unicode__(self):
-        return "%s: %s" % (self.login, self.score)
-    
-    def mean_patience(self):
-        if self.score != 0:
-            mpat = self.patience / self.score
-        else:
-            mpat = 0
-        return mpat 
-
-class Coincoins(models.Model):
-    id = models.BigIntegerField(unique=True, primary_key=True)
-    post_id = models.IntegerField(null=True, blank=True)
-    login = models.CharField(max_length=192, blank=True)
-    post_time = models.CharField(max_length=42, blank=True)
-    doublon = models.IntegerField(null=True, blank=True)
-    seul = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_coincoins'
-
+        return self.username
+        
 class Cps(models.Model):
-    login = models.CharField(max_length=192, primary_key=True)
-    latitude = models.CharField(max_length=72, blank=True)
-    longitude = models.CharField(max_length=72, blank=True)
-    class Meta:
-        db_table = u'euroxers_cps'
-
-class Fortunes(models.Model):
-    fortune_id = models.BigIntegerField(unique=True, primary_key=True)
-    fortune_no = models.IntegerField()
-    note_modo = models.IntegerField(null=True, blank=True)
-    votes_modo = models.IntegerField(null=True, blank=True)
-    fortune_login = models.CharField(max_length=192, blank=True)
-    fortune_time = models.DateTimeField()
-    id = models.BigIntegerField()
-    post_id = models.IntegerField(null=True, blank=True)
-    post_time = models.DateTimeField()
-    doublon = models.IntegerField(null=True, blank=True)
-    seul = models.IntegerField(null=True, blank=True)
-    login = models.CharField(max_length=192, blank=True)
-    info = models.CharField(max_length=192, blank=True)
-    message = models.TextField(blank=True)
-    class Meta:
-        db_table = u'euroxers_fortunes'
-
-class FortunesComments(models.Model):
-    id = models.BigIntegerField(unique=True, primary_key=True)
-    login = models.CharField(max_length=192, blank=True)
-    fortune_no = models.IntegerField()
-    date = models.DateTimeField()
-    message = models.TextField(blank=True)
-    is_titre = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_fortunes_comments'
-
-class LastCoin(models.Model):
-    post_time = models.DateTimeField()
-    coin_id = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_last_coin'
-
-class Modo(models.Model):
-    login = models.CharField(max_length=192, primary_key=True)
-    fortunes = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_modo'
-
-class ModoVotes(models.Model):
-    id = models.BigIntegerField(unique=True,primary_key=True)
-    login = models.CharField(max_length=192, blank=True)
-    fortune_no = models.IntegerField()
-    note = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_modo_votes'
-
-class Mpc(models.Model):
-    login = models.CharField(max_length=192, primary_key=True)
-    economic = models.FloatField(null=True, blank=True)
-    social = models.FloatField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_mpc'
-
-class Posts(models.Model):
-    id = models.BigIntegerField(unique=True, primary_key=True)
-    post_id = models.IntegerField(null=True, blank=True)
-    post_time = models.DateTimeField()
-    doublon = models.IntegerField(null=True, blank=True)
-    seul = models.IntegerField(null=True, blank=True)
-    login = models.CharField(max_length=192, blank=True)
-    info = models.CharField(max_length=192, blank=True)
-    message = models.TextField(blank=True)
-    class Meta:
-        db_table = u'euroxers_posts'
-
-class Preums(models.Model):
-    login = models.CharField(max_length=192, db_index=True)
-    score = models.IntegerField(null=True, blank=True)
-    equipe = models.BigIntegerField(null=True, blank=True) #models.ForeignKey('PreumsEquipes',db_column="equipe", null=False, blank=True)
-    preums_name = models.CharField(max_length=192, primary_key=True)
-    class Meta:
-        db_table = u'euroxers_preums'
-        
-    def get_equipe(self):
-        """This method only existe because the current data in the db don't
-           work with the Django configuration for null values.
-           It returns the team for the preums' moule or None if the moule
-           doesn't belong to a team"""
-        if self.equipe == 0:
-            return
-        cachekey = "_get_equipe_cache"
-        if not hasattr(self, cachekey):
-            setattr(self, cachekey, PreumsEquipes.objects.get(equipe_id=self.equipe))
-        return getattr(self, cachekey)
-        
-    def __unicode__(self):
-        return "%s (%s): %d" % (self.login, self.get_equipe(), self.score)
-        #return "%s: %d" % (self.login, self.score)
-        
+    latitude = models.DecimalField(max_digits=15,decimal_places=12)
+    longitude = models.DecimalField(max_digits=15,decimal_places=12)
+    mussel = models.ForeignKey(Mussel)
     
-
-class PreumsEquipes(models.Model):
-    equipe_id = models.BigIntegerField(unique=True, primary_key=True, db_column="id")
-    nom = models.CharField(unique=True, max_length=255, blank=True)
-    class Meta:
-        db_table = u'euroxers_preums_equipes'
-        
     def __unicode__(self):
-        return "%s" % (self.nom)
+        return "%s (%d,%d)"%(mussel.username,latitude,longitude)
 
-class PreumsMsg(models.Model):
-    post_id = models.IntegerField(null=True, blank=True)
-    post_time = models.DateTimeField()
-    login = models.CharField(max_length=192, blank=True)
-    info = models.CharField(max_length=192, blank=True)
-    message = models.TextField(blank=True)
-    preums_name = models.CharField(max_length=192, primary_key=True)
-    is_strict = models.IntegerField(null=True, blank=True)
+class Post(models.Model):
+    tribune = models.ForeignKey(Tribune)
+    post_id = models.IntegerField()
+    time = models.DateTimeField()
+    ua = models.CharField(max_length=256)
+    mussel = models.ForeignKey(Mussel,blank=True,null=True)
+    msg = models.TextField()
+    
     class Meta:
-        db_table = u'euroxers_preums_msg'
+        unique_together = ("tribune","post_id","time")
+        
+    #@classmethod
+    #def create(cls,tribune,post_id,time,ua,mussel,msg):
+        #post = Post()
+        #post.tribune=tribune
+        #post.post_id=post_id
+        #post.ua=ua
+        #post.mussel=mussel
+        #post.msg=msg
+        #return post
+    
+class Filter(PolymorphicModel):
+    tribune = models.ForeignKey(Tribune)
+        
+class PreumsFilter(Filter):
+    name = models.CharField(max_length=42)
+    hour = models.TimeField()
+    last = models.ForeignKey(Post, blank=True, null=True)
+    blacklist = models.ManyToManyField(Mussel)
+    
+    def process(self,post_list):
+        ret = None
+        candidate = None
+        for post in post_list:
+            if post.mussel and not blacklist.contains(post.mussel):
+                if self.last == None or (self.last.time.date() < post.time.date() 
+                and post.time.time() >= self.hour):
+                    if candidate == None or post.time < candidate.time or (post.time == candidate.time and post.post_id < candidate.post_id):
+                        candidate = post
+        if candidate <> None:
+            self.last = candidate
+            self.save()
+            if candidate.mussel == None:
+                ret = {'msg': u"Bonjour %s, dommage que tu ne sois pas identifié [:kiki]"%(candidate.ua)}
+            else:
+                score, create = PreumsScore.objects.get_or_create(mussel=candidate.mussel, preums=self, defaults={'score':1})
+                score.inc_score
+                score.save()
+                i = 1
+                for s in PreumsScore.objects.order_by("-score"):
+                    if s == score:
+                        ret = {'msg': "Bonjour %s, tu es %de"%(candidate.mussel.username,i)}
+                        break
+                    else:
+                        i+=1
+        return ret
+            
+class PreumsScore(models.Model):
+    mussel = models.ForeignKey(Mussel)
+    preums = models.ForeignKey(PreumsFilter)
+    score = models.IntegerField()
+    
+    def inc_score(self):
+        self.score = self.score + 1
+        
+class FortuneFilter(Filter):
+    cmd = "#fortune "
+    
+    norloge_regex = r"(\d{2}/\d{2}#)?\d{1,2}:\d{2}(:\d{2})?(¹|²|³|^[1-9]|:[1-9])?"
+    
+    bloc_regex = norloge_regex + "-" + norloge_regex
+    
+    fortune_id = models.IntegerField()
+    posts = models.ManyToManyField(Post)
+    msg = models.TextField()
+    
+    def process(self, post_list):
+        #syntaxe: #fortune norloge1 norloge2 norloge2 // commentaire
+        #ou nhorloge1-nhorloge2 pour un bloc
+        
+        for post in post_list:
+            if post.msg.startswith(self.cmd):
+                if post.mussel <> None:
+                    norloges, sep, comment = post.msg[len(cmd):].split("//")
+                    cont = True
+                    posts = []
+                    while cont:
+                        cur_hor, sep, norloges = norloges.split(" ")
+                        if sep:
+                            cur_hor = cur_hor.strip()
+                            if helpers.is_norloge(cur_hor):
+                                p_time = helpers.norloge_to_time(cur_hor)
+                                posts.append(helpers.norloge_to_post(p_time))
+                            elif helpers.is_norloge_block(cur_hor):
+                                start_nor,sep,end_nor = cur_hor.split("-")
+                                p_from = helpers.norloge_to_time(start_nor)
+                                p_to = helpers.norloge_to_time(end_nor)
+                                posts.extend(helpers.interval_to_posts(p_from,p_to))
+                        else:
+                            if helpers.is_norloge(norloges):
+                                p_time = helpers.norloge_to_time(norloges)
+                                posts.append(helpers.norloge_to_post(p_time))
+                            cont=False
+                    if posts:
+                        fortune = Fortune(tribune=post.tribune, owner=post.mussel)
+                        fortune.save()
+                        if comment:
+                            fortune.comment = comment
+                        fortune.posts.extend(posts)
+                        fortune.save()
+                            
 
-class Repondeur(models.Model):
-    id = models.BigIntegerField(unique=True, primary_key=True)
-    dest = models.CharField(max_length=192, blank=True)
-    post_time = models.DateTimeField()
-    login = models.CharField(max_length=192, blank=True)
-    info = models.CharField(max_length=192, blank=True)
-    message = models.TextField(blank=True)
-    class Meta:
-        db_table = u'euroxers_repondeur'
-
-class RepondeurConf(models.Model):
-    login = models.CharField(max_length=192, primary_key=True)
-    etat = models.IntegerField(null=True, blank=True)
-    prive = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'euroxers_repondeur_conf'
-
+                    
+class Fortune(models.Model):
+    tribune = models.ForeignKey(Tribune)
+    owner = models.ForeignKey(Mussel)
+    posts = models.ManyToManyField(Post)
+    comment = models.TextField(blank=True)
+    
+class CpsFilter(Filter):
+    regex = r"cps(:\d{1,3}(\.\d+)?){2}"
+    
+    def process(self, post_list):
+        #TODO use only the last post
+        pattern = re.compile(self.regex)
+        for post in post_list:
+            res = pattern.search(post.ua)
+            if res:
+                del_pos = res.string.find(":",4)
+                lat = float(res.string[4:del_pos])
+                lon = float(res.string[del_pos+1:])
+                try:
+                    cps = Cps.objects.get(mussel=post.mussel)
+                except Cps.DoesNotExist:
+                    cps = Cps(mussel=post.mussel)
+                if cps.latitude <> lat or cps.longitude <> lon:
+                    cps.latitude = lat
+                    cps.longitude = lon
+                    cps.save()

@@ -14,5 +14,8 @@ urlpatterns = patterns('tribune.views',
     url(r'^(?P<tribune>.+)/chasse/$', 'chasse', name= 'tobyweb-chasse-index'),
     #Cps
     url(r'^(?P<tribune>.+)/cps$', 'cps', name='tobyweb-cps-index'),
-    url(r'^(?P<tribune>.+)/cps.json/$','cps_json')
+    url(r'^(?P<tribune>.+)/cps.json/$','cps_json'),
+    
+    #Daemon posts
+    url(r'^post', 'web.views.post'),
 )
